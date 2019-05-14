@@ -1,0 +1,151 @@
+(*
+ *
+ * File: plcdemo_pid_feedforward2.exp
+ *
+ * IEC 61131-3 Structured Text (ST) code generated for subsystem "plcdemo_pid_feedforward2/pid_feedforward"
+ *
+ * Model name                      : plcdemo_pid_feedforward2
+ * Model version                   : 1.733
+ * Model creator                   : The MathWorks, Inc.
+ * Model last modified by          : fugle
+ * Model last modified on          : Tue May 14 15:17:56 2019
+ * Model sample time               : 1s
+ * Subsystem name                  : plcdemo_pid_feedforward2/pid_feedforward
+ * Subsystem sample time           : 1s
+ * Simulink PLC Coder version      : 2.5 (R2018a) 06-Feb-2018
+ * ST code generated on            : Tue May 14 15:32:23 2019
+ *
+ * Target IDE selection            : 3S CoDeSys 2.3
+ * Test Bench included             : No
+ *
+ *)
+FUNCTION_BLOCK pid_feedforward
+VAR_INPUT
+    ssMethodType: SINT;
+    Ref: LREAL;
+    FI: LREAL;
+    F: ARRAY [0..1] OF LREAL;
+    B: ARRAY [0..1] OF LREAL;
+    C: ARRAY [0..1] OF LREAL;
+    A: ARRAY [0..3] OF LREAL;
+    b_L: ARRAY [0..1] OF LREAL;
+    InputY: LREAL;
+END_VAR
+VAR_OUTPUT
+    out: LREAL;
+END_VAR
+VAR
+    c_DiscreteTimeIntegrator2_D: LREAL;
+    UnitDelay2_DSTATE: LREAL;
+    UnitDelay_DSTATE: LREAL;
+    UnitDelay1_DSTATE: ARRAY [0..1] OF LREAL;
+    UnitDelay3_DSTATE: ARRAY [0..1] OF LREAL;
+    c_DiscreteTimeIntegrator4_D: ARRAY [0..1] OF LREAL;
+END_VAR
+VAR_TEMP
+    rtb_Sum1: LREAL;
+    rtb_Sum5: LREAL;
+    DiscreteTimeIntegrator2: LREAL;
+    rtb_Sum4: LREAL;
+    DiscreteTimeIntegrator4: LREAL;
+    rtb_Sum4_idx_0: LREAL;
+    c_DiscreteTimeIntegrator4_i: LREAL;
+END_VAR
+CASE ssMethodType OF
+    SS_INITIALIZE: 
+        (* InitializeConditions for UnitDelay: '<S1>/Unit Delay2' *)
+        UnitDelay2_DSTATE := 0.0;
+        (* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator2' *)
+        c_DiscreteTimeIntegrator2_D := 0.0;
+        (* InitializeConditions for UnitDelay: '<S1>/Unit Delay' *)
+        UnitDelay_DSTATE := 0.0;
+        (* InitializeConditions for UnitDelay: '<S1>/Unit Delay1' *)
+        UnitDelay1_DSTATE[0] := 0.0;
+        (* InitializeConditions for UnitDelay: '<S1>/Unit Delay3' *)
+        UnitDelay3_DSTATE[0] := 0.0;
+        (* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator4' *)
+        c_DiscreteTimeIntegrator4_D[0] := 0.0;
+        (* InitializeConditions for UnitDelay: '<S1>/Unit Delay1' *)
+        UnitDelay1_DSTATE[1] := 0.0;
+        (* InitializeConditions for UnitDelay: '<S1>/Unit Delay3' *)
+        UnitDelay3_DSTATE[1] := 0.0;
+        (* InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator4' *)
+        c_DiscreteTimeIntegrator4_D[1] := 0.0;
+    SS_STEP: 
+        (* Sum: '<S1>/Sum1' incorporates:
+         *  UnitDelay: '<S1>/Unit Delay2' *)
+        rtb_Sum1 := UnitDelay2_DSTATE - Ref;
+        (* DiscreteIntegrator: '<S1>/Discrete-Time Integrator2' *)
+        DiscreteTimeIntegrator2 := (0.5 * rtb_Sum1) + c_DiscreteTimeIntegrator2_D;
+        (* Sum: '<S1>/Sum2' incorporates:
+         *  Inport: '<Root>/FI'
+         *  Product: '<S1>/Product'
+         *  UnitDelay: '<S1>/Unit Delay' *)
+        out := (FI * DiscreteTimeIntegrator2) + UnitDelay_DSTATE;
+        (* Sum: '<S1>/Sum4' incorporates:
+         *  Inport: '<Root>/B'
+         *  Product: '<S1>/Product8'
+         *  UnitDelay: '<S1>/Unit Delay1'
+         *  UnitDelay: '<S1>/Unit Delay3' *)
+        rtb_Sum4 := ((B[0] * out) + UnitDelay1_DSTATE[0]) + UnitDelay3_DSTATE[0];
+        (* DiscreteIntegrator: '<S1>/Discrete-Time Integrator4' *)
+        DiscreteTimeIntegrator4 := (0.5 * rtb_Sum4) + c_DiscreteTimeIntegrator4_D[0];
+        (* Product: '<S1>/Product10' incorporates:
+         *  Inport: '<Root>/C' *)
+        rtb_Sum5 := C[0] * DiscreteTimeIntegrator4;
+        (* Sum: '<S1>/Sum4' *)
+        rtb_Sum4_idx_0 := rtb_Sum4;
+        (* DiscreteIntegrator: '<S1>/Discrete-Time Integrator4' *)
+        c_DiscreteTimeIntegrator4_i := DiscreteTimeIntegrator4;
+        (* Sum: '<S1>/Sum4' incorporates:
+         *  Inport: '<Root>/B'
+         *  Product: '<S1>/Product8'
+         *  UnitDelay: '<S1>/Unit Delay1'
+         *  UnitDelay: '<S1>/Unit Delay3' *)
+        rtb_Sum4 := ((B[1] * out) + UnitDelay1_DSTATE[1]) + UnitDelay3_DSTATE[1];
+        (* DiscreteIntegrator: '<S1>/Discrete-Time Integrator4' *)
+        DiscreteTimeIntegrator4 := (0.5 * rtb_Sum4) + c_DiscreteTimeIntegrator4_D[1];
+        (* Product: '<S1>/Product10' incorporates:
+         *  Inport: '<Root>/C' *)
+        rtb_Sum5 := (C[1] * DiscreteTimeIntegrator4) + rtb_Sum5;
+        (* Sum: '<S1>/Sum5' incorporates:
+         *  Product: '<S1>/Product10' *)
+        rtb_Sum5 := rtb_Sum5 - InputY;
+        (* Update for UnitDelay: '<S1>/Unit Delay2' *)
+        UnitDelay2_DSTATE := InputY;
+        (* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator2' *)
+        c_DiscreteTimeIntegrator2_D := (0.5 * rtb_Sum1) + DiscreteTimeIntegrator2;
+        (* Update for UnitDelay: '<S1>/Unit Delay1' incorporates:
+         *  Inport: '<Root>/L'
+         *  Product: '<S1>/Product11' *)
+        UnitDelay1_DSTATE[0] := b_L[0] * rtb_Sum5;
+        (* Update for UnitDelay: '<S1>/Unit Delay3' incorporates:
+         *  Inport: '<Root>/A'
+         *  Product: '<S1>/Product9' *)
+        UnitDelay3_DSTATE[0] := 0.0;
+        UnitDelay3_DSTATE[0] := (A[0] * c_DiscreteTimeIntegrator4_i) + UnitDelay3_DSTATE[0];
+        UnitDelay3_DSTATE[0] := (A[2] * DiscreteTimeIntegrator4) + UnitDelay3_DSTATE[0];
+        (* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator4' *)
+        c_DiscreteTimeIntegrator4_D[0] := (0.5 * rtb_Sum4_idx_0) + c_DiscreteTimeIntegrator4_i;
+        (* Update for UnitDelay: '<S1>/Unit Delay1' incorporates:
+         *  Inport: '<Root>/L'
+         *  Product: '<S1>/Product11' *)
+        UnitDelay1_DSTATE[1] := b_L[1] * rtb_Sum5;
+        (* Update for UnitDelay: '<S1>/Unit Delay3' incorporates:
+         *  Inport: '<Root>/A'
+         *  Product: '<S1>/Product9' *)
+        UnitDelay3_DSTATE[1] := 0.0;
+        UnitDelay3_DSTATE[1] := (A[1] * c_DiscreteTimeIntegrator4_i) + UnitDelay3_DSTATE[1];
+        UnitDelay3_DSTATE[1] := (A[3] * DiscreteTimeIntegrator4) + UnitDelay3_DSTATE[1];
+        (* Update for DiscreteIntegrator: '<S1>/Discrete-Time Integrator4' *)
+        c_DiscreteTimeIntegrator4_D[1] := (0.5 * rtb_Sum4) + DiscreteTimeIntegrator4;
+        (* Update for UnitDelay: '<S1>/Unit Delay' incorporates:
+         *  Inport: '<Root>/F'
+         *  Product: '<S1>/Product7' *)
+        UnitDelay_DSTATE := (F[0] * c_DiscreteTimeIntegrator4_i) + (F[1] * DiscreteTimeIntegrator4);
+END_CASE;
+END_FUNCTION_BLOCK
+VAR_GLOBAL CONSTANT
+    SS_INITIALIZE: SINT := 0;
+    SS_STEP: SINT := 1;
+END_VAR
